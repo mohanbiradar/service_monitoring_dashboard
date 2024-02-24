@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Service Monitoring Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy2BQFn0K1N5giMDH8S6UJsa06Y3AHdI2H" crossorigin="anonymous">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+
+    <style>
+        body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+
+        .container {
+            padding: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .text-success {
+            color: green;
+        }
+
+        .heading {
+            text-align: center;
+        }
+        .text-danger {
+            color: red;
+        }
+        /* Style for Refresh Button */
+        .refresh-button {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 5px;
+            margin: 5px;
+            font-size: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .refresh-button:hover {
+            background-color: #0056b3;
+        }
+
+        .start-button, .restart-button {
+            display: inline-block;
+            padding: 5px 10px;
+            margin-right: 5px;
+            text-decoration: none;
+            color: #fff;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .start-button {
+            background-color: #28a745;
+        }
+
+        .restart-button {
+            background-color: #FFC34D;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#"></a>
+</nav>
+<h1 class="heading">Service Monitoring Dashboard</h1>
+<div class="container">
+    <h3>
+    <!-- Refresh Button -->
+    <button class="refresh-button" onclick="location.reload(true)">Get Latest Service Status</button>
+    </h3>
+    <table class="table table-striped" id="serviceStatusTable">
+        <thead>
+        <tr>
+            <th>Service Name</th>
+            <th>Environment</th>
+            <th>Service Health Endpoint</th>
+            <th>Status</th>
+            <th>Action (WIP)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="status : ${statusMap}">
+            <td th:text="${status.name}"></td>
+            <td th:text="${status.environment}"></td>
+            <td th:text="${status.url}"></td>
+            <td th:text="${status.isRunning ? 'UP' : 'DOWN'}"
+                th:class="${status.isRunning} ? 'text-success' : 'text-danger'"></td>
+            <td>
+                <a th:if="${status.isRunning}" class="restart-button" href="#">Restart</a>
+                <a th:unless="${status.isRunning}" class="start-button" href="#">Start</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="footer">
+    <p>&copy; 2022 Your Company</p>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-1qexM1LQszGrJ8In1eD9n9+D6UFxSw6dMzcvT8qu1rEEmKp8XQK3pu5hi1xH3Si6"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy2BQFn0K1N5giMDH8S6UJsa06Y3AHdI2H"
+        crossorigin="anonymous"></script>
+
+<!-- DataTables JS and dependencies -->
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+
+<!-- DataTables initialization script -->
+<script>
+    $(document).ready(function () {
+        $('#serviceStatusTable').DataTable();
+    });
+</script>
+</body>
+</html>

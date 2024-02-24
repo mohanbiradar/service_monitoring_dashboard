@@ -1,0 +1,15 @@
+server:
+  port: 9999
+spring:
+  thymeleaf:
+    cache: false
+
+host-prod: api.example.ai
+host-test: api-test2.example.ai
+services:
+  - name: auth-services
+    url: https://${host-prod}/auth-services/actuator/health
+  - name: ahq-standalone-local-services
+    url: https://${host-prod}/ahq-standalone-local-services/actuator/health
+  - name: dashboard-services
+    url: https://${host-prod}/dashboard-services/actuator/health
